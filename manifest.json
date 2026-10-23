@@ -7,7 +7,21 @@
       "id": "com.custom.okru",
       "name": "OkRu Custom Scraper",
       "version": "1.0.0",
+      "author": "Custom",
       "description": "ดึงข้อมูลวิดีโอจาก ok.ru",
+      "url": "https://7495iptv.github.io/nuvio-scraper/okru.js",
+      "script_url": "https://7495iptv.github.io/nuvio-scraper/okru.js",
+      "catalog_url": "https://7495iptv.github.io/nuvio-scraper/playlist.json"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "com.custom.okru",
+      "name": "OkRu Custom Scraper",
+      "version": "1.0.0",
+      "author": "Custom",
+      "description": "ดึงข้อมูลวิดีโอจาก ok.ru",
+      "url": "https://7495iptv.github.io/nuvio-scraper/okru.js",
       "script_url": "https://7495iptv.github.io/nuvio-scraper/okru.js",
       "catalog_url": "https://7495iptv.github.io/nuvio-scraper/playlist.json"
     }
