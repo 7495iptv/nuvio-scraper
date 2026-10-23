@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuvio Catalog Test</title>
+    <style>
+        /* จัดรูปแบบหน้าตาให้ดูเหมือนเมนูบนแอปทีวี */
+        body { background-color: #1e1e1e; color: white; font-family: sans-serif; }
+        #catalog { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+        .card { 
+            width: 250px; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+            background: #2a2a2a; 
+            border-radius: 8px; 
+            padding-bottom: 10px;
+        }
+        .card:hover { transform: scale(1.05); border: 2px solid #00a8ff; }
+        .card img { width: 100%; border-top-left-radius: 8px; border-top-right-radius: 8px; aspect-ratio: 16/9; object-fit: cover; }
+        .card h3 { font-size: 14px; margin: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h2>เลือกรายการเพื่อรับชม</h2>
+    <!-- พื้นที่สำหรับใส่รายการวิดีโอ -->
+    <div id="catalog"></div>
+    <script src="okru.js"></script>
+	
+    <script>
+        // 1. ข้อมูล JSON ที่เราเตรียมไว้ (สามารถเปลี่ยนเป็นการใช้ fetch โหลดไฟล์ playlist.json จากโฮสต์ได้)
+        const playlistData = [
+            {
+                "title": "South Alabama vs Marshall (Oct 20, 2026)",
+                "image": "https://nfl-video.com/_ld/32/09906188.png",
+                "video_url": "https://ok.ru/videoembed/16573654174380"
+            },
+            {
+                "title": "Missouri State vs Delaware (Oct 20, 2026)",
+                "image": "https://nfl-video.com/_ld/32/88677139.png",
+                "video_url": "https://ok.ru/videoembed/16573745269420"
+            }
+        ];
+
+        // 2. ฟังก์ชันสำหรับสร้างหน้าจอแคตตาล็อก
+        function renderCatalog(items) {
+            const catalogContainer = document.getElementById('catalog');
+            
+            items.forEach(item => {
+                // สร้างกล่องการ์ด
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // สร้างภาพปก
+                const img = document.createElement('img');
+                img.src = item.image;
+                
+                // สร้างชื่อเรื่อง
+                const title = document.createElement('h3');
+                title.textContent = item.title;
+                
+                // 3. กำหนดคำสั่งเมื่อผู้ใช้กดเลือก
+                card.onclick = async () => {
+                    console.log(`คุณเลือก: ${item.title}`);
+                    console.log(`ระบบกำลังส่งลิงก์ไปแกะรหัส: ${item.video_url}`);
+                    
+                    // นำเครื่องหมาย // ออก และใส่ await เพื่อรอให้ฟังก์ชันทำงานเสร็จ
+                    const streams = await extractOkRuStream(item.video_url);
+                    
+                    if (streams && streams.length > 0) {
+                        // ดึงลิงก์ความละเอียดล่าสุด (มักจะเป็น HD)
+                        const bestQuality = streams[streams.length - 1]; 
+                        console.log(`✅ ดึงลิงก์สำเร็จ! ความละเอียด: ${bestQuality.name}`);
+                        console.log(`▶️ Direct Link: ${bestQuality.url}`);
+                    } else {
+                        console.log("❌ ไม่สามารถดึงลิงก์วิดีโอได้");
+                    }
+                };
+                
+                // นำองค์ประกอบประกอบเข้าด้วยกัน
+                card.appendChild(img);
+                card.appendChild(title);
+                catalogContainer.appendChild(card);
+            });
+        }
+
+        // เริ่มต้นการทำงาน
+        renderCatalog(playlistData);
+    </script>
+</body>
+</html>
